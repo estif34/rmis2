@@ -74,5 +74,14 @@ class User extends Authenticatable
                     ->withPivot('permission') // If you store permission level in the pivot table
                     ->withTimestamps();
     }
+    /**
+     * Check if the user has admin role.
+     *
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
 
 }

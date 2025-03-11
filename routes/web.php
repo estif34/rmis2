@@ -2,10 +2,17 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\RiskController;
+use App\Http\Controllers\RiskCategoryController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('dashboard');
 });
+
+require __DIR__.'/auth.php';
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -23,5 +30,18 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Risk routes
+Route::resource('risks', App\Http\Controllers\RiskController::class);
+Route::get('risks/{risk}/collaborators', [App\Http\Controllers\RiskController::class, 'manageCollaborators'])->name('risks.collaborators');
+Route::post('risks/{risk}/collaborators', [App\Http\Controllers\RiskController::class, 'updateCollaborators'])->name('risks.collaborators.update');
 
-require __DIR__.'/auth.php';
+// Risk category routes
+Route::resource('categories', App\Http\Controllers\RiskCategoryController::class);
+
+Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
+
+    
+
+

@@ -1,0 +1,353 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Risk Details') }}
+        </h2>
+    </x-slot>
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            @if (session('success'))
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+                    <span class="block sm:inline">{{ session('success') }}</span>
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                    <span class="block sm:inline">{{ session('error') }}</span>
+                </div>
+            @endif
+
+            <!-- Action buttons at the top of the content area -->
+            <div class="mb-4 flex justify-end space-x-2">
+                @if (Auth::id() === $risk->user_id)
+                    <a href="{{ route('risks.collaborators', $risk) }}" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
+                        Manage Collaborators
+                    </a>
+                @endif
+                
+                @if (Auth::id() === $risk->user_id || $risk->collaborators->where('user_id', Auth::id())->where('permission', 'edit')->count() > 0)
+                    <a href="{{ route('risks.edit', $risk) }}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
+                        Edit Risk
+                    </a>
+                @endif
+                
+                <a href="{{ route('risks.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                    Back to List
+                </a>
+            </div>
+
+            <!-- Risk Header Card -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                <div class="p-6">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-800">{{ $risk->title }}</h2>
+                            <div class="flex items-center space-x-4 mt-2">
+                                <span class="px-3 py-1 text-sm rounded-full
+                                    {{ $risk->level === 'high' ? 'bg-red-100 text-red-800' : 
+                                    ($risk->level === 'medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800') }}">
+                                    {{ ucfirst($risk->level ?? 'Not set') }} Risk
+                                </span>
+                                <span class="px-3 py-1 text-sm rounded-full
+                                    {{ $risk->status === 'open' ? 'bg-blue-100 text-blue-800' : 
+                                    ($risk->status === 'in_progress' ? 'bg-yellow-100 text-yellow-800' : 
+                                    ($risk->status === 'mitigated' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800')) }}">
+                                    {{ ucfirst(str_replace('_', ' ', $risk->status ?? 'Not set')) }}
+                                </span>
+                                <span class="text-sm text-gray-600">Category: <span class="font-medium">{{ $risk->category->name }}</span></span>
+                            </div>
+                        </div>
+                        <div class="mt-4 md:mt-0 flex flex-col items-end">
+                            <!-- <span class="text-sm text-gray-600">Risk ID: {{ $risk->id }}</span> -->
+                            <span class="text-sm text-gray-600">Owner: {{ $risk->user->name }}</span>
+                            <span class="text-sm text-gray-600">Created: {{ $risk->created_at->format('M d, Y') }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <!-- Main Content (Risk, Impact, Mitigation) - 3 columns -->
+                <div class="md:col-span-3">
+                    <!-- Tab Navigation -->
+                    <div class="mb-6 bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="flex border-b">
+                            <button onclick="showTab('risk-details')" id="risk-tab" class="flex-1 py-4 px-6 text-center font-medium focus:outline-none border-b-2 border-blue-500 text-blue-500">
+                                Risk Details
+                            </button>
+                            <button onclick="showTab('impact-assessment')" id="impact-tab" class="flex-1 py-4 px-6 text-center font-medium focus:outline-none border-b-2 border-transparent text-gray-500 hover:text-gray-700">
+                                Impact Assessment
+                            </button>
+                            <button onclick="showTab('mitigation-strategy')" id="mitigation-tab" class="flex-1 py-4 px-6 text-center font-medium focus:outline-none border-b-2 border-transparent text-gray-500 hover:text-gray-700">
+                                Mitigation Strategy
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Risk Details Tab -->
+                    <div id="risk-details" class="tab-content bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                        <div class="p-6">
+                            <div class="mb-6">
+                                <h3 class="text-lg font-medium text-gray-900 border-b pb-2">Risk Description</h3>
+                                <p class="mt-3 text-gray-700">{{ $risk->description ?? 'No description provided.' }}</p>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-3">Assessment Details</h3>
+                                    <div class="space-y-3">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Likelihood:</span>
+                                            <span class="font-medium">{{ ucfirst(str_replace('_', ' ', $risk->likelihood ?? 'Not set')) }}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Proximity:</span>
+                                            <span class="font-medium">{{ ucfirst(str_replace('_', ' ', $risk->proximity ?? 'Not set')) }}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Risk Area:</span>
+                                            <span class="font-medium">{{ $risk->risk_area ?? 'Not set' }}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Department:</span>
+                                            <span class="font-medium">{{ $risk->department ?? 'Not set' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-3">Risk Timeline</h3>
+                                    <div class="space-y-3">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Created:</span>
+                                            <span class="font-medium">{{ $risk->created_at->format('M d, Y') }}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Last Updated:</span>
+                                            <span class="font-medium">{{ $risk->updated_at->format('M d, Y') }}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Current Status:</span>
+                                            <span class="font-medium">{{ ucfirst(str_replace('_', ' ', $risk->status ?? 'Not set')) }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Impact Assessment Tab -->
+                    <div id="impact-assessment" class="tab-content bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6 hidden">
+                        <div class="p-6">
+                            <div class="mb-6">
+                                <h3 class="text-lg font-medium text-gray-900 border-b pb-2">Impact Description</h3>
+                                <p class="mt-3 text-gray-700">{{ $risk->impact_description ?? 'No impact description provided.' }}</p>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-3">Impact Metrics</h3>
+                                    <div class="space-y-3">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Impact Level:</span>
+                                            <span class="font-medium">{{ ucfirst($risk->impact_level ?? 'Not set') }}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Impact Likelihood:</span>
+                                            <span class="font-medium">{{ ucfirst(str_replace('_', ' ', $risk->impact_likelihood ?? 'Not set')) }}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Impact Proximity:</span>
+                                            <span class="font-medium">{{ ucfirst(str_replace('_', ' ', $risk->impact_proximity ?? 'Not set')) }}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Impact Type:</span>
+                                            <span class="font-medium">{{ ucfirst($risk->impact_type ?? 'Not set') }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-3">Financial Impact</h3>
+                                    <div class="space-y-3">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Financial Impact:</span>
+                                            <span class="font-medium">${{ number_format($risk->financial_impact ?? 0, 2) }}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Cause of Impact:</span>
+                                            <span class="font-medium">{{ $risk->cause_of_impact ?? 'Not specified' }}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Impact Status:</span>
+                                            <span class="font-medium px-2 py-1 text-xs rounded-full
+                                                {{ $risk->impact_status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                                                ($risk->impact_status === 'active' ? 'bg-red-100 text-red-800' : 
+                                                ($risk->impact_status === 'resolved' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800')) }}">
+                                                {{ ucfirst($risk->impact_status ?? 'Not set') }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mitigation Strategy Tab -->
+                    <div id="mitigation-strategy" class="tab-content bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6 hidden">
+                        <div class="p-6">
+                            <div class="mb-6">
+                                <h3 class="text-lg font-medium text-gray-900 border-b pb-2">Mitigation Strategy</h3>
+                                <p class="mt-3 text-gray-700">{{ $risk->mitigation_strategy ?? 'No mitigation strategy provided.' }}</p>
+                            </div>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-3">Response Details</h3>
+                                    <div class="space-y-3">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Response Type:</span>
+                                            <span class="font-medium">{{ ucfirst($risk->response_type ?? 'Not set') }}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Responsible Department:</span>
+                                            <span class="font-medium">{{ $risk->mitigation_department ?? 'Not assigned' }}</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-600">Residual Risk:</span>
+                                            <span class="font-medium">{{ $risk->residual_risk ?? 'Not assessed' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-3">Implementation Status</h3>
+                                    <div class="mt-4 w-full bg-gray-200 rounded-full h-2.5">
+                                        @php
+                                            $statusPercentage = 0;
+                                            if ($risk->mitigation_status === 'pending') $statusPercentage = 0;
+                                            elseif ($risk->mitigation_status === 'in_progress') $statusPercentage = 50;
+                                            elseif ($risk->mitigation_status === 'completed') $statusPercentage = 100;
+                                        @endphp
+                                        <div class="bg-blue-600 h-2.5 rounded-full" style="width: {{ $statusPercentage }}%"></div>
+                                    </div>
+                                    <div class="flex justify-between mt-2 text-sm">
+                                        <span>Pending</span>
+                                        <span>In Progress</span>
+                                        <span>Completed</span>
+                                    </div>
+                                    <div class="mt-4 flex justify-center">
+                                        <span class="px-3 py-1 text-sm rounded-full
+                                            {{ $risk->mitigation_status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                                            ($risk->mitigation_status === 'in_progress' ? 'bg-blue-100 text-blue-800' : 
+                                            ($risk->mitigation_status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800')) }}">
+                                            {{ ucfirst($risk->mitigation_status ?? 'Not set') }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar - 1 column -->
+                <div class="md:col-span-1">
+                    <!-- Risk Owner Card -->
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                        <div class="p-6">
+                            <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-3">Risk Owner</h3>
+                            <div class="flex items-center mb-4">
+                                <div class="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 font-semibold">
+                                    {{ substr($risk->user->name, 0, 1) }}
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">{{ $risk->user->name }}</p>
+                                    <p class="text-sm text-gray-500">{{ $risk->user->email }}</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-600">Department: {{ $risk->user->department }}</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Collaborators Card -->
+                     @if (Auth::id() === $risk->user_id)
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6">
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="text-lg font-medium text-gray-900">Collaborators</h3>
+                                @if (Auth::id() === $risk->user_id)
+                                    <a href="{{ route('risks.collaborators', $risk) }}" class="text-sm text-indigo-600 hover:text-indigo-900">
+                                        Manage
+                                    </a>
+                                @endif
+                            </div>
+                            
+                            @if ($risk->collaborators->count() > 0)
+                                <ul class="divide-y divide-gray-200">
+                                    @foreach ($risk->collaborators as $collaborator)
+                                        <li class="py-2">
+                                            <div class="flex items-center space-x-3">
+                                                <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-700 font-semibold">
+                                                    {{ substr($collaborator->user->name, 0, 1) }}
+                                                </div>
+                                                <div class="flex-1 min-w-0">
+                                                    <p class="text-sm font-medium text-gray-900 truncate">
+                                                        {{ $collaborator->user->name }}
+                                                    </p>
+                                                    <p class="text-xs text-gray-500 truncate">
+                                                        {{ $collaborator->user->email }}
+                                                    </p>
+                                                </div>
+                                                <div>
+                                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                                        {{ $collaborator->permission == 'edit' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800' }}">
+                                                        {{ ucfirst($collaborator->permission) }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <p class="text-sm text-gray-600">No collaborators assigned.</p>
+                            @endif
+                        </div>
+                    </div>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript for tab functionality -->
+    <script>
+        function showTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.flex.border-b button').forEach(button => {
+                button.classList.remove('border-blue-500', 'text-blue-500');
+                button.classList.add('border-transparent', 'text-gray-500');
+            });
+            
+            // Show the selected tab content
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            // Map tab content IDs to tab button IDs
+            const tabButtonMap = {
+                'risk-details': 'risk-tab',
+                'impact-assessment': 'impact-tab',
+                'mitigation-strategy': 'mitigation-tab'
+            };
+            
+            // Add active class to the corresponding tab button
+            const buttonId = tabButtonMap[tabId];
+            if (buttonId) {
+                document.getElementById(buttonId).classList.add('border-blue-500', 'text-blue-500');
+                document.getElementById(buttonId).classList.remove('border-transparent', 'text-gray-500');
+            }
+        }
+    </script>
+</x-app-layout>

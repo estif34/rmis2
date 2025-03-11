@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('likelihood')->nullable();
             $table->string('risk_area')->nullable();
             $table->string('department')->nullable();
-            $table->string('status')->default('pending');
+            $table->string('status')->default('open');
             
             // Impact details
             $table->string('impact_level')->nullable();
