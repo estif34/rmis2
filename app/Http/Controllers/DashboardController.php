@@ -28,27 +28,74 @@ class DashboardController extends Controller
         return view('dashboard', compact('stats'));
     }
     
+    public function filterByLevel($level)
+    {
+        $risks = Risk::with(['user', 'category'])
+            ->where('level', $level)
+            ->latest()
+            ->paginate(10);
+            
+        $filterTitle = ucfirst($level) . ' Level Risks';
+        
+        return view('risks.filtered', compact('risks', 'filterTitle'));
+    }
+    
+    public function filterByStatus($status)
+    {
+        $risks = Risk::with(['user', 'category'])
+            ->where('status', $status)
+            ->latest()
+            ->paginate(10);
+            
+        $filterTitle = ucfirst(str_replace('_', ' ', $status)) . ' Risks';
+        
+        return view('risks.filtered', compact('risks', 'filterTitle'));
+    }
+    
+    public function filterUserRisks()
+    {
+        $risks = Risk::with(['user', 'category'])
+            ->where('user_id', Auth::id())
+            ->latest()
+            ->paginate(10);
+            
+        $filterTitle = 'My Risks';
+        
+        return view('risks.filtered', compact('risks', 'filterTitle'));
+    }
+    
+    public function filterAllRisks()
+    {
+        $risks = Risk::with(['user', 'category'])
+            ->latest()
+            ->paginate(10);
+            
+        $filterTitle = 'All Risks';
+        
+        return view('risks.filtered', compact('risks', 'filterTitle'));
+    }
+    
     private function getTotalRisks()
     {
-        
-            return Risk::count();
-        
+        // All users can see all risks now
+        return Risk::count();
     }
     
     private function getRisksByLevel($level)
     {
-        
+        // All users can see all risks with the specified level
         return Risk::where('level', $level)->count();
     }
     
     private function getRisksByStatus($status)
     {
-
+        // All users can see all risks with the specified status
         return Risk::where('status', $status)->count();
     }
     
     private function getUserRisks()
     {
+        // This still shows only risks created by the current user
         return Risk::where('user_id', Auth::id())->count();
     }
 }
