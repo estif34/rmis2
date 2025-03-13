@@ -21,13 +21,13 @@
 
             <!-- Action buttons at the top of the content area -->
             <div class="mb-4 flex justify-end space-x-2">
-                @if (Auth::id() === $risk->user_id || Auth::user()->role === 'admin')
+                @if (Auth::id() === $risk->user_id)
                     <a href="{{ route('risks.collaborators', $risk) }}" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
                         Manage Collaborators
                     </a>
                 @endif
                 
-                @if (Auth::id() === $risk->user_id || Auth::user()->role === 'admin' || $risk->collaborators->where('user_id', Auth::id())->where('permission', 'edit')->count() > 0)
+                @if (Auth::id() === $risk->user_id || $risk->collaborators->where('user_id', Auth::id())->where('permission', 'edit')->count() > 0)
                     <a href="{{ route('risks.edit', $risk) }}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
                         Edit Risk
                     </a>
@@ -283,7 +283,7 @@
                                 @endforelse
                             </div>
                             <!-- Comment Form -->
-                            @if(Auth::id() === $risk->user_id || Auth::user()->role === 'admin' || $risk->collaborators->where('user_id', Auth::id())->count() > 0)
+                            @if(Auth::id() === $risk->user_id || $risk->collaborators->where('user_id', Auth::id())->count() > 0)
                                 <form method="POST" action="{{ route('risks.comments.store', $risk) }}" class="mb-6">
                                     @csrf
                                     <div class="mb-3">
@@ -349,7 +349,7 @@
                         <div class="p-6">
                             <div class="flex justify-between items-center mb-3">
                                 <h3 class="text-lg font-medium text-gray-900">Collaborators</h3>
-                                @if (Auth::id() === $risk->user_id || Auth::user()->role === 'admin')
+                                @if (Auth::id() === $risk->user_id)
                                     <a href="{{ route('risks.collaborators', $risk) }}" class="text-sm text-indigo-600 hover:text-indigo-900">
                                         Manage
                                     </a>

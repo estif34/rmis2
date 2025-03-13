@@ -86,10 +86,10 @@
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <a href="{{ route('risks.show', $risk) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">View</a>
                                             
-                                            @if (Auth::id() === $risk->user_id || Auth::user()->role === 'admin' || ($risk->collaborators->where('user_id', Auth::id())->where('permission', 'edit')->count() > 0))
+                                            @if (Auth::id() === $risk->user_id || ($risk->collaborators->where('user_id', Auth::id())->where('permission', 'edit')->count() > 0))
                                                 <a href="{{ route('risks.edit', $risk) }}" class="text-yellow-600 hover:text-yellow-900 mr-3">Edit</a>
                                                 
-                                                @if (Auth::id() === $risk->user_id || Auth::user()->role === 'admin')
+                                                @if (Auth::id() === $risk->user_id)
                                                     <form action="{{ route('risks.destroy', $risk) }}" method="POST" class="inline">
                                                         @csrf
                                                         @method('DELETE')
