@@ -104,7 +104,7 @@ class RiskController extends Controller
         // Check if user has access to this risk
         $this->authorizeAccess($risk);
         
-        $risk->load(['user', 'category', 'collaborators.user']);
+        $risk->load(['user', 'category', 'collaborators.user', 'comments.user', 'updatedByUser']);
         
         return view('risks.show', compact('risk'));
     }
@@ -157,7 +157,7 @@ public function update(Request $request, Risk $risk)
     ]);
     
     $validated['updated_by'] = Auth::id();
-    
+
     $risk->update($validated);
     
     return redirect()->route('risks.show', $risk)

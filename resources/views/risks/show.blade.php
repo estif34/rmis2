@@ -240,8 +240,66 @@
                     </div>
                 </div>
 
+                
+
                 <!-- Sidebar - 1 column -->
                 <div class="md:col-span-1">
+                    <!-- Comments Section -->
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                        <div class="p-6">
+                            <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-4">Comments</h3>
+                            
+                            <!-- Comments List -->
+                            <div class="space-y-4 mb-4">
+                                @forelse($risk->comments as $comment)
+                                    <div class="bg-gray-50 p-4 rounded-lg">
+                                        <div class="flex items-start mb-2">
+                                            <div class="flex-shrink-0">
+                                                <div class="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 font-semibold">
+                                                    {{ substr($comment->user->name, 0, 1) }}
+                                                </div>
+                                            </div>
+                                            <div class="ml-3 flex-1">
+                                                <p class="text-sm font-medium text-gray-900">{{ $comment->user->name }}</p>
+                                                <p class="text-xs text-gray-500">{{ $comment->created_at->format('M d, Y H:i') }}</p>
+                                            </div>
+                                            
+                                            <!-- Delete Comment Button (for comment owner, risk owner, or admin) -->
+                                            @if(Auth::id() === $comment->user_id)
+                                                <form method="POST" action="{{ route('risks.comments.destroy', [$risk, $comment]) }}">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="text-red-500 hover:text-red-700 text-sm" 
+                                                            onclick="return confirm('Are you sure you want to delete this comment?')">
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </div>
+                                        <div class="text-sm text-gray-700 whitespace-pre-line">{{ $comment->content }}</div>
+                                    </div>
+                                @empty
+                                    <p class="text-gray-500 text-center italic">No comments yet. Be the first to comment!</p>
+                                @endforelse
+                            </div>
+                            <!-- Comment Form -->
+                            @if(Auth::id() === $risk->user_id || Auth::user()->role === 'admin' || $risk->collaborators->where('user_id', Auth::id())->count() > 0)
+                                <form method="POST" action="{{ route('risks.comments.store', $risk) }}" class="mb-6">
+                                    @csrf
+                                    <div class="mb-3">
+                                        <textarea name="content" rows="3" placeholder="Add a comment..." 
+                                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                                required></textarea>
+                                    </div>
+                                    <div class="flex justify-end">
+                                        <button type="submit" class="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                            Post Comment
+                                        </button>
+                                    </div>
+                                </form>
+                            @endif
+                        </div>
+                    </div>
                     <!-- Risk Owner Card -->
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
                         <div class="p-6">

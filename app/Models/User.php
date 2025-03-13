@@ -83,5 +83,9 @@ class User extends Authenticatable
     {
         return $this->role === 'admin';
     }
+    public function riskComments()
+    {
+        return $this->hasMany(RiskComment::class);
+    }
 
 }

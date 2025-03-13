@@ -66,7 +66,9 @@ Route::middleware(['approved'])->prefix('dashboard')->group(function () {
     Route::get('/risks/user', [App\Http\Controllers\DashboardController::class, 'filterUserRisks'])->name('dashboard.filter.user');
     Route::get('/risks/all', [App\Http\Controllers\DashboardController::class, 'filterAllRisks'])->name('dashboard.filter.all');
 });
-
+// Risk comment routes
+Route::post('risks/{risk}/comments', [App\Http\Controllers\RiskCommentController::class, 'store'])->name('risks.comments.store');
+Route::delete('risks/{risk}/comments/{comment}', [App\Http\Controllers\RiskCommentController::class, 'destroy'])->name('risks.comments.destroy');
     
 
 
