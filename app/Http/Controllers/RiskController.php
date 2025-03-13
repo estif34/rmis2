@@ -156,6 +156,8 @@ public function update(Request $request, Risk $risk)
         'risk_category_id' => 'required|exists:risk_categories,id',
     ]);
     
+    $validated['updated_by'] = Auth::id();
+    
     $risk->update($validated);
     
     return redirect()->route('risks.show', $risk)

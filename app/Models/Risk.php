@@ -40,6 +40,7 @@ class Risk extends Model
         // Foreign keys
         'user_id',
         'risk_category_id',
+        'updated_by',
     ];
     
     /**
@@ -74,5 +75,12 @@ class Risk extends Model
         return $this->belongsToMany(User::class, 'risk_collaborators', 'risk_id', 'user_id')
                     ->withPivot('permission')
                     ->withTimestamps();
+    }
+    /**
+     * Get the user who last updated this risk.
+     */
+    public function updatedByUser()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 }

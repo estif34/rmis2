@@ -21,13 +21,13 @@
 
             <!-- Action buttons at the top of the content area -->
             <div class="mb-4 flex justify-end space-x-2">
-                @if (Auth::id() === $risk->user_id)
+                @if (Auth::id() === $risk->user_id || Auth::user()->role === 'admin')
                     <a href="{{ route('risks.collaborators', $risk) }}" class="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
                         Manage Collaborators
                     </a>
                 @endif
                 
-                @if (Auth::id() === $risk->user_id || $risk->collaborators->where('user_id', Auth::id())->where('permission', 'edit')->count() > 0)
+                @if (Auth::id() === $risk->user_id || Auth::user()->role === 'admin' || $risk->collaborators->where('user_id', Auth::id())->where('permission', 'edit')->count() > 0)
                     <a href="{{ route('risks.edit', $risk) }}" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">
                         Edit Risk
                     </a>
@@ -60,9 +60,9 @@
                             </div>
                         </div>
                         <div class="mt-4 md:mt-0 flex flex-col items-end">
-                            <!-- <span class="text-sm text-gray-600">Risk ID: {{ $risk->id }}</span> -->
-                            <span class="text-sm text-gray-600">Owner: {{ $risk->user->name }}</span>
-                            <span class="text-sm text-gray-600">Created: {{ $risk->created_at->format('M d, Y') }}</span>
+                            <span class="text-sm text-gray-600">Risk ID: {{ $risk->id }}</span>
+                            <span class="text-sm text-gray-600">Created By: {{ $risk->user->name }}</span>
+                            <span class="text-sm text-gray-600">Created On: {{ $risk->created_at->format('M d, Y') }}</span>
                         </div>
                     </div>
                 </div>
@@ -71,32 +71,19 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <!-- Main Content (Risk, Impact, Mitigation) - 3 columns -->
                 <div class="md:col-span-3">
-                    <!-- Tab Navigation -->
-                    <div class="mb-6 bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="flex border-b">
-                            <button onclick="showTab('risk-details')" id="risk-tab" class="flex-1 py-4 px-6 text-center font-medium focus:outline-none border-b-2 border-blue-500 text-blue-500">
-                                Risk Details
-                            </button>
-                            <button onclick="showTab('impact-assessment')" id="impact-tab" class="flex-1 py-4 px-6 text-center font-medium focus:outline-none border-b-2 border-transparent text-gray-500 hover:text-gray-700">
-                                Impact Assessment
-                            </button>
-                            <button onclick="showTab('mitigation-strategy')" id="mitigation-tab" class="flex-1 py-4 px-6 text-center font-medium focus:outline-none border-b-2 border-transparent text-gray-500 hover:text-gray-700">
-                                Mitigation Strategy
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Risk Details Tab -->
-                    <div id="risk-details" class="tab-content bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                    <!-- Risk Details Section -->
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
                         <div class="p-6">
+                            <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-4">Risk Details</h3>
+                            
                             <div class="mb-6">
-                                <h3 class="text-lg font-medium text-gray-900 border-b pb-2">Risk Description</h3>
-                                <p class="mt-3 text-gray-700">{{ $risk->description ?? 'No description provided.' }}</p>
+                                <h4 class="text-md font-medium text-gray-900 mb-2">Description</h4>
+                                <p class="text-gray-700">{{ $risk->description ?? 'No description provided.' }}</p>
                             </div>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-3">Assessment Details</h3>
+                                    <h4 class="text-md font-medium text-gray-900 border-b pb-2 mb-3">Assessment Details</h4>
                                     <div class="space-y-3">
                                         <div class="flex justify-between">
                                             <span class="text-gray-600">Likelihood:</span>
@@ -117,7 +104,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-3">Risk Timeline</h3>
+                                    <h4 class="text-md font-medium text-gray-900 border-b pb-2 mb-3">Risk Timeline</h4>
                                     <div class="space-y-3">
                                         <div class="flex justify-between">
                                             <span class="text-gray-600">Created:</span>
@@ -137,17 +124,19 @@
                         </div>
                     </div>
 
-                    <!-- Impact Assessment Tab -->
-                    <div id="impact-assessment" class="tab-content bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6 hidden">
+                    <!-- Impact Assessment Section -->
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
                         <div class="p-6">
+                            <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-4">Impact Assessment</h3>
+                            
                             <div class="mb-6">
-                                <h3 class="text-lg font-medium text-gray-900 border-b pb-2">Impact Description</h3>
-                                <p class="mt-3 text-gray-700">{{ $risk->impact_description ?? 'No impact description provided.' }}</p>
+                                <h4 class="text-md font-medium text-gray-900 mb-2">Impact Description</h4>
+                                <p class="text-gray-700">{{ $risk->impact_description ?? 'No impact description provided.' }}</p>
                             </div>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-3">Impact Metrics</h3>
+                                    <h4 class="text-md font-medium text-gray-900 border-b pb-2 mb-3">Impact Metrics</h4>
                                     <div class="space-y-3">
                                         <div class="flex justify-between">
                                             <span class="text-gray-600">Impact Level:</span>
@@ -168,7 +157,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-3">Financial Impact</h3>
+                                    <h4 class="text-md font-medium text-gray-900 border-b pb-2 mb-3">Financial Impact</h4>
                                     <div class="space-y-3">
                                         <div class="flex justify-between">
                                             <span class="text-gray-600">Financial Impact:</span>
@@ -193,17 +182,19 @@
                         </div>
                     </div>
 
-                    <!-- Mitigation Strategy Tab -->
-                    <div id="mitigation-strategy" class="tab-content bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6 hidden">
+                    <!-- Mitigation Strategy Section -->
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
                         <div class="p-6">
+                            <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-4">Mitigation Strategy</h3>
+                            
                             <div class="mb-6">
-                                <h3 class="text-lg font-medium text-gray-900 border-b pb-2">Mitigation Strategy</h3>
-                                <p class="mt-3 text-gray-700">{{ $risk->mitigation_strategy ?? 'No mitigation strategy provided.' }}</p>
+                                <h4 class="text-md font-medium text-gray-900 mb-2">Strategy Details</h4>
+                                <p class="text-gray-700">{{ $risk->mitigation_strategy ?? 'No mitigation strategy provided.' }}</p>
                             </div>
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-3">Response Details</h3>
+                                    <h4 class="text-md font-medium text-gray-900 border-b pb-2 mb-3">Response Details</h4>
                                     <div class="space-y-3">
                                         <div class="flex justify-between">
                                             <span class="text-gray-600">Response Type:</span>
@@ -220,7 +211,7 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-3">Implementation Status</h3>
+                                    <h4 class="text-md font-medium text-gray-900 border-b pb-2 mb-3">Implementation Status</h4>
                                     <div class="mt-4 w-full bg-gray-200 rounded-full h-2.5">
                                         @php
                                             $statusPercentage = 0;
@@ -267,14 +258,40 @@
                             <p class="text-sm text-gray-600">Department: {{ $risk->user->department }}</p>
                         </div>
                     </div>
+
+                    <!-- Activity Info Card -->
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                        <div class="p-6">
+                            <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-3">Activity Log</h3>
+                            
+                            <div class="space-y-3">
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-700">Created</h4>
+                                    <p class="text-sm text-gray-600">By: {{ $risk->user->name }}</p>
+                                    <p class="text-sm text-gray-600">Date: {{ $risk->created_at->format('M d, Y') }}</p>
+                                    <p class="text-sm text-gray-600">At: {{ $risk->created_at->format('h:i A') }}</p>
+                                </div>
+                                
+                                @if ($risk->updated_at->gt($risk->created_at))
+                                    <div class="pt-3 border-t border-gray-200">
+                                        <h4 class="text-sm font-medium text-gray-700">Last Updated</h4>
+                                        <p class="text-sm text-gray-600">
+                                            By: {{ $risk->updated_by ? $risk->updatedByUser->name : 'Unknown' }}
+                                        </p>
+                                        <p class="text-sm text-gray-600">Date: {{ $risk->updated_at->format('M d, Y') }}</p>
+                                        <p class="text-sm text-gray-600">Time: {{ $risk->updated_at->format('h:i A') }}</p>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
                     
                     <!-- Collaborators Card -->
-                     @if (Auth::id() === $risk->user_id)
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6">
                             <div class="flex justify-between items-center mb-3">
                                 <h3 class="text-lg font-medium text-gray-900">Collaborators</h3>
-                                @if (Auth::id() === $risk->user_id)
+                                @if (Auth::id() === $risk->user_id || Auth::user()->role === 'admin')
                                     <a href="{{ route('risks.collaborators', $risk) }}" class="text-sm text-indigo-600 hover:text-indigo-900">
                                         Manage
                                     </a>
@@ -312,42 +329,8 @@
                             @endif
                         </div>
                     </div>
-                    @endif
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- JavaScript for tab functionality -->
-    <script>
-        function showTab(tabId) {
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.add('hidden');
-            });
-            
-            // Remove active class from all tab buttons
-            document.querySelectorAll('.flex.border-b button').forEach(button => {
-                button.classList.remove('border-blue-500', 'text-blue-500');
-                button.classList.add('border-transparent', 'text-gray-500');
-            });
-            
-            // Show the selected tab content
-            document.getElementById(tabId).classList.remove('hidden');
-            
-            // Map tab content IDs to tab button IDs
-            const tabButtonMap = {
-                'risk-details': 'risk-tab',
-                'impact-assessment': 'impact-tab',
-                'mitigation-strategy': 'mitigation-tab'
-            };
-            
-            // Add active class to the corresponding tab button
-            const buttonId = tabButtonMap[tabId];
-            if (buttonId) {
-                document.getElementById(buttonId).classList.add('border-blue-500', 'text-blue-500');
-                document.getElementById(buttonId).classList.remove('border-transparent', 'text-gray-500');
-            }
-        }
-    </script>
 </x-app-layout>
