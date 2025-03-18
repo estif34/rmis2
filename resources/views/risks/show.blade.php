@@ -316,36 +316,8 @@
                             <p class="text-sm text-gray-600">Department: {{ $risk->user->department }}</p>
                         </div>
                     </div>
-
-                    <!-- Activity Info Card -->
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                        <div class="p-6">
-                            <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-3">Activity Log</h3>
-                            
-                            <div class="space-y-3">
-                                <div>
-                                    <h4 class="text-sm font-medium text-gray-700">Created</h4>
-                                    <p class="text-sm text-gray-600">By: {{ $risk->user->name }}</p>
-                                    <p class="text-sm text-gray-600">Date: {{ $risk->created_at->format('M d, Y') }}</p>
-                                    <p class="text-sm text-gray-600">At: {{ $risk->created_at->format('h:i A') }}</p>
-                                </div>
-                                
-                                @if ($risk->updated_at->gt($risk->created_at))
-                                    <div class="pt-3 border-t border-gray-200">
-                                        <h4 class="text-sm font-medium text-gray-700">Last Updated</h4>
-                                        <p class="text-sm text-gray-600">
-                                            By: {{ $risk->updated_by ? $risk->updatedByUser->name : 'Unknown' }}
-                                        </p>
-                                        <p class="text-sm text-gray-600">Date: {{ $risk->updated_at->format('M d, Y') }}</p>
-                                        <p class="text-sm text-gray-600">Time: {{ $risk->updated_at->format('h:i A') }}</p>
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                    
                     <!-- Collaborators Card -->
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
                         <div class="p-6">
                             <div class="flex justify-between items-center mb-3">
                                 <h3 class="text-lg font-medium text-gray-900">Collaborators</h3>
@@ -387,6 +359,34 @@
                             @endif
                         </div>
                     </div>
+
+                    <!-- Activity Info Card -->
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                        <div class="p-6">
+                            <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-3">Activity Log</h3>
+                            
+                            <div class="space-y-3">
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-700">Created</h4>
+                                    <p class="text-sm text-gray-600">By: {{ $risk->user->name }}</p>
+                                    <p class="text-sm text-gray-600">Date: {{ $risk->created_at->format('M d, Y') }}</p>
+                                    <p class="text-sm text-gray-600">At: {{ $risk->created_at->format('h:i A') }}</p>
+                                </div>
+                                
+                                @if ($risk->updated_at->gt($risk->created_at))
+                                    <div class="pt-3 border-t border-gray-200">
+                                        <h4 class="text-sm font-medium text-gray-700">Last Updated</h4>
+                                        <p class="text-sm text-gray-600">
+                                            By: {{ $risk->updated_by ? $risk->updatedByUser->name : 'Unknown' }}
+                                        </p>
+                                        <p class="text-sm text-gray-600">Date: {{ $risk->updated_at->format('M d, Y') }}</p>
+                                        <p class="text-sm text-gray-600">Time: {{ $risk->updated_at->format('h:i A') }}</p>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
         </div>

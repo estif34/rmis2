@@ -18,32 +18,38 @@ class RiskController extends Controller
     /**
      * Display a listing of the risks.
      */
+    // public function index()
+    // {
+    //     $risks = Risk::with(['user', 'category'])
+    //         ->where(function($query) {
+    //             // Show risks created by the user
+    //             $query->where('user_id', Auth::id());
+                
+    //             // Or risks where the user is a collaborator
+    //             if (!Auth::user()->isAdmin()) {
+    //                 $query->orWhereHas('collaborators', function($q) {
+    //                     $q->where('user_id', Auth::id());
+    //                 });
+    //             }
+    //         })
+    //         ->latest()
+    //         ->paginate(10);
+    //     // all users can view all risks    
+    //     // If admin, show all risks with no filters    
+    //     if (Auth::user()->role === 'admin') {
+    //         $risks = Risk::with(['user', 'category'])->latest()->paginate(10);    
+    //     } else {
+    //     // For regular users, show all risks but indicate which ones they can edit        
+    //     $risks = Risk::with(['user', 'category', 'collaborators'])->latest()->paginate(10);    
+    //     }    
+        
+    //     return view('risks.index', compact('risks'));
+    // }
+
     public function index()
     {
-        $risks = Risk::with(['user', 'category'])
-            ->where(function($query) {
-                // Show risks created by the user
-                $query->where('user_id', Auth::id());
-                
-                // Or risks where the user is a collaborator
-                if (!Auth::user()->isAdmin()) {
-                    $query->orWhereHas('collaborators', function($q) {
-                        $q->where('user_id', Auth::id());
-                    });
-                }
-            })
-            ->latest()
-            ->paginate(10);
-        // all users can view all risks    
-        // If admin, show all risks with no filters    
-        if (Auth::user()->role === 'admin') {
-            $risks = Risk::with(['user', 'category'])->latest()->paginate(10);    
-        } else {
-        // For regular users, show all risks but indicate which ones they can edit        
-        $risks = Risk::with(['user', 'category', 'collaborators'])->latest()->paginate(10);    
-        }    
-        
-        return view('risks.index', compact('risks'));
+        // The view now just wraps the Livewire component
+        return view('risks.index');
     }
 
     /**
