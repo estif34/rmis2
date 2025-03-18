@@ -38,6 +38,10 @@ Route::middleware(['approved'])->group(function(){
         Route::get('/users', [App\Http\Controllers\AdminController::class, 'userManagement'])->name('admin.users');
         Route::patch('/users/{user}/approve', [App\Http\Controllers\AdminController::class, 'approveUser'])->name('admin.users.approve');
         Route::patch('/users/{user}/role', [App\Http\Controllers\AdminController::class, 'updateUserRole'])->name('admin.users.update-role');
+
+        Route::patch('/users/{user}/reject', [App\Http\Controllers\AdminController::class, 'rejectUser'])->name('admin.users.reject');
+        Route::patch('/users/{user}/deactivate', [App\Http\Controllers\AdminController::class, 'deactivateUser'])->name('admin.users.deactivate');
+        Route::patch('/users/{user}/reactivate', [App\Http\Controllers\AdminController::class, 'reactivateUser'])->name('admin.users.reactivate');
     });
 
     // Risk routes

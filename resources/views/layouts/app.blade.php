@@ -13,25 +13,42 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    
+    <!-- Livewire Styles -->
     @livewireStyles
 </head>
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100">
-        <!-- Sidebar -->
-        <div x-data="{ open: true }" class="flex h-screen overflow-hidden bg-gray-100">
+        <!-- Sidebar & Content Container -->
+        <div x-data="{ sidebarOpen: window.innerWidth >= 1024 }" class="flex h-screen overflow-hidden bg-gray-100">
+            <!-- Sidebar Backdrop (Mobile Only) -->
+            <div x-show="sidebarOpen" 
+                @click="sidebarOpen = false" 
+                class="fixed inset-0 z-20 bg-black bg-opacity-50 lg:hidden"
+                x-transition:enter="transition-opacity ease-linear duration-300"
+                x-transition:enter-start="opacity-0"
+                x-transition:enter-end="opacity-100"
+                x-transition:leave="transition-opacity ease-linear duration-300"
+                x-transition:leave-start="opacity-100"
+                x-transition:leave-end="opacity-0">
+            </div>
+            
             <!-- Sidebar -->
-            <div x-show="open" class="fixed inset-y-0 left-0 z-30 w-64 transition duration-300 transform bg-white border-r lg:translate-x-0 lg:static lg:inset-0 flex flex-col h-full"
-                x-transition:enter="transition ease-out duration-300"
-                x-transition:enter-start="-translate-x-full"
-                x-transition:enter-end="translate-x-0"
-                x-transition:leave="transition ease-in duration-300"
-                x-transition:leave-start="translate-x-0"
-                x-transition:leave-end="-translate-x-full">
+            <div x-show="sidebarOpen"
+                 x-transition:enter="transition ease-in-out duration-300 transform"
+                 x-transition:enter-start="-translate-x-full"
+                 x-transition:enter-end="translate-x-0"
+                 x-transition:leave="transition ease-in-out duration-300 transform"
+                 x-transition:leave-start="translate-x-0"
+                 x-transition:leave-end="-translate-x-full"
+                 class="fixed inset-y-0 left-0 z-30 w-64 bg-white border-r shadow-md overflow-y-auto flex flex-col lg:static lg:inset-auto">
+                
+                <!-- Logo & Menu Toggle -->
                 <div class="flex items-center justify-between flex-shrink-0 p-4">
                     <a href="{{ route('dashboard') }}" class="text-lg font-semibold text-gray-800">
                         <h1 class="text-3xl font-extrabold text-center text-indigo-600 ">RMIS</h1>
                     </a>
-                    <button @click="open = false" class="p-1 transition-colors duration-200 rounded-md text-gray-600 lg:hidden hover:text-gray-900 hover:bg-gray-100">
+                    <button @click="sidebarOpen = false" class="p-1 transition-colors duration-200 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100 lg:hidden">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
@@ -89,7 +106,7 @@
                     @endif
                 </nav>
 
-                <!-- User Profile - Now with mt-auto to push it to the bottom -->
+                <!-- User Profile -->
                 <div class="mt-auto p-4 border-t border-gray-200">
                     <a href="/profile" class="block">
                         <div class="flex items-center space-x-3">
@@ -123,11 +140,11 @@
             </div>
 
             <!-- Main Content -->
-            <div class="flex-1 flex flex-col overflow-hidden">
+            <div class="flex-1 flex flex-col overflow-x-hidden overflow-y-auto">
                 <!-- Top Navbar -->
                 <header class="flex items-center justify-between p-4 bg-white border-b">
                     <div class="flex items-center space-x-3">
-                        <button @click="open = !open" class="text-gray-500 focus:outline-none lg:hidden">
+                        <button @click="sidebarOpen = !sidebarOpen" class="text-gray-500 focus:outline-none">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                             </svg>
@@ -159,7 +176,7 @@
                                 <!-- Logout -->
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
-                                    <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-red-500">
                                         {{ __('Log Out') }}
                                     </button>
                                 </form>
@@ -175,6 +192,22 @@
             </div>
         </div>
     </div>
+
+    <!-- Livewire Scripts -->
     @livewireScripts
+
+    <!-- Alpine Init For Screen Resize -->
+    <script>
+        // document.addEventListener('alpine:init', () => {
+        //     window.addEventListener('resize', () => {
+        //         // Auto-close sidebar on small screens, auto-open on large screens
+        //         if (window.innerWidth < 1024) { // <lg breakpoint
+        //             Alpine.store('sidebar', { open: false });
+        //         } else {
+        //             Alpine.store('sidebar', { open: true });
+        //         }
+        //     });
+        // });
+    </script>
 </body>
 </html>

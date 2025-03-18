@@ -16,8 +16,18 @@ class CheckUserApproved
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && !Auth::user()->is_approved) {
-            return redirect()->route('approval.pending');
+        if (Auth::check()) {
+            // Check if user is rejected
+            if (Auth::user()->is_rejected) {
+                Auth::logout();
+                return redirect()->route('login')
+                    ->withErrors(['email' => 'Your account has been deactivated.']);
+            }
+            
+            // Check if user is approved
+            if (!Auth::user()->is_approved) {
+                return redirect()->route('approval.pending');
+            }
         }
 
         return $next($request);

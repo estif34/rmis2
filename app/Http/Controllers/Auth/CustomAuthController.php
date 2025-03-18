@@ -22,6 +22,21 @@ class CustomAuthController extends Controller
         if (Auth::attempt($request->only('email', 'password'))) {
             $user = Auth::user();
             
+            // Check if user is rejected
+            if ($user->is_rejected) {
+                Auth::logout();
+                $request->session()->invalidate();
+                $request->session()->regenerateToken();
+                
+                $message = $user->rejection_reason 
+                    ? 'Your account has been deactivated. Reason: ' . $user->rejection_reason
+                    : 'Your account has been deactivated. Please contact an administrator.';
+                    
+                throw ValidationException::withMessages([
+                    'email' => [$message],
+                ]);
+            }
+            
             // Check if user is approved
             if (!$user->is_approved) {
                 Auth::logout();

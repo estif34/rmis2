@@ -24,6 +24,8 @@ class User extends Authenticatable
         'role',
         'department',
         'is_approved',
+        'is_rejected',
+        'rejection_reason',
     ];  
 
     /**
