@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Notifications\AccountApproved;
+use App\Notifications\AccountRejected;
 
 class AdminController extends Controller
 {
@@ -33,7 +35,10 @@ class AdminController extends Controller
     
     public function approveUser(User $user)
     {
-        $user->update(['is_approved' => true]);
+        $user->update(['is_approved' => true, 'is_rejected' => false, 'rejection_reason' => null]);
+    
+        // Send notification to the user
+        $user->notify(new AccountApproved());
         
         return redirect()->back()->with('success', 'User approved successfully');
     }
@@ -62,6 +67,8 @@ class AdminController extends Controller
             'is_rejected' => true,
             'rejection_reason' => $validated['rejection_reason'],
         ]);
+        // Send notification to the user
+        $user->notify(new AccountRejected($validated['rejection_reason']));
         
         return redirect()->back()->with('success', 'User account rejected successfully');
     }
@@ -79,6 +86,7 @@ class AdminController extends Controller
             'is_rejected' => true,
             'rejection_reason' => $validated['rejection_reason'],
         ]);
+        $user->notify(new AccountRejected($validated['rejection_reason']));
         
         return redirect()->back()->with('success', 'User account deactivated successfully');
     }
@@ -92,6 +100,7 @@ class AdminController extends Controller
             'is_rejected' => false,
             'rejection_reason' => null,
         ]);
+        $user->notify(new AccountApproved());
         
         return redirect()->back()->with('success', 'User account reactivated successfully');
     }

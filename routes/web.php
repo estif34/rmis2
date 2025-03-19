@@ -74,5 +74,10 @@ Route::middleware(['approved'])->prefix('dashboard')->group(function () {
 Route::post('risks/{risk}/comments', [App\Http\Controllers\RiskCommentController::class, 'store'])->name('risks.comments.store');
 Route::delete('risks/{risk}/comments/{comment}', [App\Http\Controllers\RiskCommentController::class, 'destroy'])->name('risks.comments.destroy');
     
-
+// Notification routes
+Route::middleware(['auth'])->prefix('notifications')->group(function () {
+    Route::get('/', [App\Http\Controllers\NotificationsController::class, 'index'])->name('notifications.index');
+    Route::post('/mark-as-read/{id}', [App\Http\Controllers\NotificationsController::class, 'markAsRead'])->name('notifications.markAsRead');
+    Route::post('/mark-all-as-read', [App\Http\Controllers\NotificationsController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
+});
 

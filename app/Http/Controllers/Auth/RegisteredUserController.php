@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use App\Notifications\NewUserRegistered;
 
 class RegisteredUserController extends Controller
 {
@@ -44,6 +45,12 @@ class RegisteredUserController extends Controller
             'role' => 'user', // Default role
             'is_approved' => false, // Default to not approved
         ]);
+
+         // Notify all admin users about the new registration
+        $admins = User::where('role', 'admin')->get();
+        foreach ($admins as $admin) {
+            $admin->notify(new NewUserRegistered($user));
+        }
 
         event(new Registered($user));
 
