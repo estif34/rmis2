@@ -44,7 +44,7 @@
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center">
                         <div>
                             <h2 class="text-2xl font-bold text-gray-800">{{ $risk->title }}</h2>
-                            <div class="flex items-center space-x-4 mt-2">
+                            <div class="flex flex-wrap items-center gap-2 mt-2">
                                 <span class="px-3 py-1 text-sm rounded-full
                                     {{ $risk->level === 'high' ? 'bg-red-100 text-red-800' : 
                                     ($risk->level === 'medium' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800') }}">
@@ -61,16 +61,16 @@
                         </div>
                         <div class="mt-4 md:mt-0 flex flex-col items-end">
                             <span class="text-sm text-gray-600">Risk ID: {{ $risk->id }}</span>
-                            <span class="text-sm text-gray-600">Created By: {{ $risk->user->name }}</span>
-                            <span class="text-sm text-gray-600">Created On: {{ $risk->created_at->format('M d, Y') }}</span>
+                            <span class="text-sm text-gray-600">Owner: {{ $risk->user->name }}</span>
+                            <span class="text-sm text-gray-600">Created: {{ $risk->created_at->format('M d, Y') }}</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <!-- Main Content (Risk, Impact, Mitigation) - 3 columns -->
-                <div class="md:col-span-3">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Main Content (Risk, Impact, Mitigation) - 2 columns -->
+                <div class="md:col-span-2">
                     <!-- Risk Details Section -->
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
                         <div class="p-6">
@@ -78,45 +78,49 @@
                             
                             <div class="mb-6">
                                 <h4 class="text-md font-medium text-gray-900 mb-2">Description</h4>
-                                <p class="text-gray-700">{{ $risk->description ?? 'No description provided.' }}</p>
+                                <p class="text-gray-700 leading-relaxed">{{ $risk->description ?? 'No description provided.' }}</p>
                             </div>
                             
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <h4 class="text-md font-medium text-gray-900 border-b pb-2 mb-3">Assessment Details</h4>
-                                    <div class="space-y-3">
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Likelihood:</span>
-                                            <span class="font-medium">{{ ucfirst(str_replace('_', ' ', $risk->likelihood ?? 'Not set')) }}</span>
+                            <!-- Horizontal Information Displays -->
+                            <div class="grid grid-cols-1 gap-6">
+                                <!-- Assessment Details - Horizontal -->
+                                <div class="bg-gray-50 p-5 rounded-lg">
+                                    <h4 class="text-md font-medium text-gray-900 mb-4">Assessment Details</h4>
+                                    <div class="flex flex-wrap gap-4">
+                                        <div class="flex-1 min-w-[150px]">
+                                            <span class="block text-gray-600 mb-1">Likelihood</span>
+                                            <span class="block font-medium">{{ ucfirst(str_replace('_', ' ', $risk->likelihood ?? 'Not set')) }}</span>
                                         </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Proximity:</span>
-                                            <span class="font-medium">{{ ucfirst(str_replace('_', ' ', $risk->proximity ?? 'Not set')) }}</span>
+                                        <div class="flex-1 min-w-[150px]">
+                                            <span class="block text-gray-600 mb-1">Proximity</span>
+                                            <span class="block font-medium">{{ ucfirst(str_replace('_', ' ', $risk->proximity ?? 'Not set')) }}</span>
                                         </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Risk Area:</span>
-                                            <span class="font-medium">{{ $risk->risk_area ?? 'Not set' }}</span>
+                                        <div class="flex-1 min-w-[150px]">
+                                            <span class="block text-gray-600 mb-1">Risk Area</span>
+                                            <span class="block font-medium">{{ $risk->risk_area ?? 'Not set' }}</span>
                                         </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Department:</span>
-                                            <span class="font-medium">{{ $risk->department ?? 'Not set' }}</span>
+                                        <div class="flex-1 min-w-[150px]">
+                                            <span class="block text-gray-600 mb-1">Department</span>
+                                            <span class="block font-medium">{{ $risk->department ?? 'Not set' }}</span>
                                         </div>
                                     </div>
                                 </div>
-                                <div>
-                                    <h4 class="text-md font-medium text-gray-900 border-b pb-2 mb-3">Risk Timeline</h4>
-                                    <div class="space-y-3">
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Created:</span>
-                                            <span class="font-medium">{{ $risk->created_at->format('M d, Y') }}</span>
+                                
+                                <!-- Risk Timeline - Horizontal -->
+                                <div class="bg-gray-50 p-5 rounded-lg">
+                                    <h4 class="text-md font-medium text-gray-900 mb-4">Risk Timeline</h4>
+                                    <div class="flex flex-wrap gap-4">
+                                        <div class="flex-1 min-w-[150px]">
+                                            <span class="block text-gray-600 mb-1">Created</span>
+                                            <span class="block font-medium">{{ $risk->created_at->format('M d, Y') }}</span>
                                         </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Last Updated:</span>
-                                            <span class="font-medium">{{ $risk->updated_at->format('M d, Y') }}</span>
+                                        <div class="flex-1 min-w-[150px]">
+                                            <span class="block text-gray-600 mb-1">Last Updated</span>
+                                            <span class="block font-medium">{{ $risk->updated_at->format('M d, Y') }}</span>
                                         </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Current Status:</span>
-                                            <span class="font-medium">{{ ucfirst(str_replace('_', ' ', $risk->status ?? 'Not set')) }}</span>
+                                        <div class="flex-1 min-w-[150px]">
+                                            <span class="block text-gray-600 mb-1">Current Status</span>
+                                            <span class="block font-medium">{{ ucfirst(str_replace('_', ' ', $risk->status ?? 'Not set')) }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -124,56 +128,74 @@
                         </div>
                     </div>
 
-                    <!-- Impact Assessment Section -->
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                        <div class="p-6">
-                            <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-4">Impact Assessment</h3>
-                            
+                    <!-- Impact Assessment Section - Collapsible -->
+                    <div x-data="{ open: true }" class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                        <div @click="open = !open" class="p-4 border-b cursor-pointer flex justify-between items-center">
+                            <h3 class="text-lg font-medium text-gray-900">Impact Assessment</h3>
+                            <button class="focus:outline-none text-gray-600">
+                                <svg x-show="!open" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                                <svg x-show="open" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <div x-show="open" class="p-6">
                             <div class="mb-6">
-                                <h4 class="text-md font-medium text-gray-900 mb-2">Impact Description</h4>
-                                <p class="text-gray-700">{{ $risk->impact_description ?? 'No impact description provided.' }}</p>
+                                <h4 class="text-md font-medium text-gray-900 mb-3">Impact Description</h4>
+                                <div class="p-4 bg-gray-50 rounded-lg">
+                                    <p class="text-gray-700 leading-relaxed">{{ $risk->impact_description ?? 'No impact description provided.' }}</p>
+                                </div>
                             </div>
                             
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <h4 class="text-md font-medium text-gray-900 border-b pb-2 mb-3">Impact Metrics</h4>
-                                    <div class="space-y-3">
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Impact Level:</span>
-                                            <span class="font-medium">{{ ucfirst($risk->impact_level ?? 'Not set') }}</span>
+                            <!-- Horizontal Information Displays -->
+                            <div class="grid grid-cols-1 gap-6">
+                                <!-- Impact Metrics - Horizontal -->
+                                <div class="p-5 rounded-lg border border-gray-100">
+                                    <h4 class="text-md font-medium text-gray-900 mb-4">Impact Metrics</h4>
+                                    <div class="flex flex-wrap gap-4">
+                                        <div class="flex-1 min-w-[150px]">
+                                            <span class="block text-gray-600 mb-1">Impact Level</span>
+                                            <span class="block font-medium">{{ ucfirst($risk->impact_level ?? 'Not set') }}</span>
                                         </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Impact Likelihood:</span>
-                                            <span class="font-medium">{{ ucfirst(str_replace('_', ' ', $risk->impact_likelihood ?? 'Not set')) }}</span>
+                                        <div class="flex-1 min-w-[150px]">
+                                            <span class="block text-gray-600 mb-1">Impact Likelihood</span>
+                                            <span class="block font-medium">{{ ucfirst(str_replace('_', ' ', $risk->impact_likelihood ?? 'Not set')) }}</span>
                                         </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Impact Proximity:</span>
-                                            <span class="font-medium">{{ ucfirst(str_replace('_', ' ', $risk->impact_proximity ?? 'Not set')) }}</span>
+                                        <div class="flex-1 min-w-[150px]">
+                                            <span class="block text-gray-600 mb-1">Impact Proximity</span>
+                                            <span class="block font-medium">{{ ucfirst(str_replace('_', ' ', $risk->impact_proximity ?? 'Not set')) }}</span>
                                         </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Impact Type:</span>
-                                            <span class="font-medium">{{ ucfirst($risk->impact_type ?? 'Not set') }}</span>
+                                        <div class="flex-1 min-w-[150px]">
+                                            <span class="block text-gray-600 mb-1">Impact Type</span>
+                                            <span class="block font-medium">{{ ucfirst($risk->impact_type ?? 'Not set') }}</span>
                                         </div>
                                     </div>
                                 </div>
-                                <div>
-                                    <h4 class="text-md font-medium text-gray-900 border-b pb-2 mb-3">Financial Impact</h4>
-                                    <div class="space-y-3">
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Financial Impact:</span>
-                                            <span class="font-medium">${{ number_format($risk->financial_impact ?? 0, 2) }}</span>
+                                
+                                <!-- Financial Impact - Horizontal -->
+                                <div class="p-5 rounded-lg border border-gray-100">
+                                    <h4 class="text-md font-medium text-gray-900 mb-4">Financial Impact</h4>
+                                    <div class="flex flex-wrap gap-4">
+                                        <div class="flex-1 min-w-[150px]">
+                                            <span class="block text-gray-600 mb-1">Financial Impact</span>
+                                            <span class="block font-medium">${{ number_format($risk->financial_impact ?? 0, 2) }}</span>
                                         </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Cause of Impact:</span>
-                                            <span class="font-medium">{{ $risk->cause_of_impact ?? 'Not specified' }}</span>
+                                        <div class="flex-1 min-w-[150px]">
+                                            <span class="block text-gray-600 mb-1">Cause of Impact</span>
+                                            <span class="block font-medium">{{ $risk->cause_of_impact ?? 'Not specified' }}</span>
                                         </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Impact Status:</span>
-                                            <span class="font-medium px-2 py-1 text-xs rounded-full
-                                                {{ $risk->impact_status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
-                                                ($risk->impact_status === 'active' ? 'bg-red-100 text-red-800' : 
-                                                ($risk->impact_status === 'resolved' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800')) }}">
-                                                {{ ucfirst($risk->impact_status ?? 'Not set') }}
+                                        <div class="flex-1 min-w-[150px]">
+                                            <span class="block text-gray-600 mb-1">Impact Status</span>
+                                            <span class="block font-medium">
+                                                <span class="px-2 py-1 text-xs rounded-full
+                                                    {{ $risk->impact_status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                                                    ($risk->impact_status === 'active' ? 'bg-red-100 text-red-800' : 
+                                                    ($risk->impact_status === 'resolved' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800')) }}">
+                                                    {{ ucfirst($risk->impact_status ?? 'Not set') }}
+                                                </span>
                                             </span>
                                         </div>
                                     </div>
@@ -182,56 +204,78 @@
                         </div>
                     </div>
 
-                    <!-- Mitigation Strategy Section -->
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                        <div class="p-6">
-                            <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-4">Mitigation Strategy</h3>
-                            
+                    <!-- Mitigation Strategy Section - Collapsible -->
+                    <div x-data="{ open: true }" class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                        <div @click="open = !open" class="p-4 border-b cursor-pointer flex justify-between items-center">
+                            <h3 class="text-lg font-medium text-gray-900">Mitigation Strategy</h3>
+                            <button class="focus:outline-none text-gray-600">
+                                <svg x-show="!open" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                                <svg x-show="open" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <div x-show="open" class="p-6">
                             <div class="mb-6">
-                                <h4 class="text-md font-medium text-gray-900 mb-2">Strategy Details</h4>
-                                <p class="text-gray-700">{{ $risk->mitigation_strategy ?? 'No mitigation strategy provided.' }}</p>
+                                <h4 class="text-md font-medium text-gray-900 mb-3">Strategy Details</h4>
+                                <div class="p-4 bg-gray-50 rounded-lg">
+                                    <p class="text-gray-700 leading-relaxed">{{ $risk->mitigation_strategy ?? 'No mitigation strategy provided.' }}</p>
+                                </div>
                             </div>
                             
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div>
-                                    <h4 class="text-md font-medium text-gray-900 border-b pb-2 mb-3">Response Details</h4>
-                                    <div class="space-y-3">
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Response Type:</span>
-                                            <span class="font-medium">{{ ucfirst($risk->response_type ?? 'Not set') }}</span>
+                            <!-- Horizontal Information Displays -->
+                            <div class="grid grid-cols-1 gap-6">
+                                <!-- Response Details - Horizontal -->
+                                <div class="p-5 rounded-lg border border-gray-100">
+                                    <h4 class="text-md font-medium text-gray-900 mb-4">Response Details</h4>
+                                    <div class="flex flex-wrap gap-4">
+                                        <div class="flex-1 min-w-[150px]">
+                                            <span class="block text-gray-600 mb-1">Response Type</span>
+                                            <span class="block font-medium">{{ ucfirst($risk->response_type ?? 'Not set') }}</span>
                                         </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Responsible Department:</span>
-                                            <span class="font-medium">{{ $risk->mitigation_department ?? 'Not assigned' }}</span>
+                                        <div class="flex-1 min-w-[150px]">
+                                            <span class="block text-gray-600 mb-1">Responsible Department</span>
+                                            <span class="block font-medium">{{ $risk->mitigation_department ?? 'Not assigned' }}</span>
                                         </div>
-                                        <div class="flex justify-between">
-                                            <span class="text-gray-600">Residual Risk:</span>
-                                            <span class="font-medium">{{ $risk->residual_risk ?? 'Not assessed' }}</span>
+                                        <div class="flex-1 min-w-[150px]">
+                                            <span class="block text-gray-600 mb-1">Residual Risk</span>
+                                            <span class="block font-medium">{{ $risk->residual_risk ?? 'Not assessed' }}</span>
                                         </div>
                                     </div>
                                 </div>
-                                <div>
-                                    <h4 class="text-md font-medium text-gray-900 border-b pb-2 mb-3">Implementation Status</h4>
-                                    <div class="mt-4 w-full bg-gray-200 rounded-full h-2.5">
+                                
+                                <!-- Implementation Status -->
+                                <div class="p-5 rounded-lg border border-gray-100">
+                                    <h4 class="text-md font-medium text-gray-900 mb-4">Implementation Status</h4>
+                                    
+                                    <div class="mb-4">
                                         @php
                                             $statusPercentage = 0;
                                             if ($risk->mitigation_status === 'pending') $statusPercentage = 0;
                                             elseif ($risk->mitigation_status === 'in_progress') $statusPercentage = 50;
                                             elseif ($risk->mitigation_status === 'completed') $statusPercentage = 100;
                                         @endphp
-                                        <div class="bg-blue-600 h-2.5 rounded-full" style="width: {{ $statusPercentage }}%"></div>
+                                        
+                                        <div class="h-3 w-full bg-gray-200 rounded-full overflow-hidden">
+                                            <div class="h-full bg-blue-600 rounded-full" style="width: {{ $statusPercentage }}%"></div>
+                                        </div>
+                                        
+                                        <div class="flex justify-between mt-2 text-xs text-gray-500">
+                                            <span>Pending</span>
+                                            <span>In Progress</span>
+                                            <span>Completed</span>
+                                        </div>
                                     </div>
-                                    <div class="flex justify-between mt-2 text-sm">
-                                        <span>Pending</span>
-                                        <span>In Progress</span>
-                                        <span>Completed</span>
-                                    </div>
-                                    <div class="mt-4 flex justify-center">
+                                    
+                                    <div class="flex justify-center mt-4">
                                         <span class="px-3 py-1 text-sm rounded-full
                                             {{ $risk->mitigation_status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
                                             ($risk->mitigation_status === 'in_progress' ? 'bg-blue-100 text-blue-800' : 
                                             ($risk->mitigation_status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800')) }}">
-                                            {{ ucfirst($risk->mitigation_status ?? 'Not set') }}
+                                            {{ \Illuminate\Support\Str::ucfirst(\Illuminate\Support\Str::replace('_', ' ', $risk->mitigation_status ?? 'Not set')) }}
                                         </span>
                                     </div>
                                 </div>
@@ -240,9 +284,7 @@
                     </div>
                 </div>
 
-                
-
-                <!-- Sidebar - 1 column -->
+                <!-- Sidebar - Wider 1/3 of the grid -->
                 <div class="md:col-span-1">
                     <!-- Comments Section -->
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
@@ -250,7 +292,7 @@
                             <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-4">Comments</h3>
                             
                             <!-- Comments List -->
-                            <div class="space-y-4 mb-4">
+                            <div class="space-y-4 mb-6 max-h-80 overflow-y-auto">
                                 @forelse($risk->comments as $comment)
                                     <div class="bg-gray-50 p-4 rounded-lg">
                                         <div class="flex items-start mb-2">
@@ -284,38 +326,26 @@
                             </div>
                             <!-- Comment Form -->
                             @if(Auth::id() === $risk->user_id || $risk->collaborators->where('user_id', Auth::id())->count() > 0)
-                                <form method="POST" action="{{ route('risks.comments.store', $risk) }}" class="mb-6">
-                                    @csrf
-                                    <div class="mb-3">
-                                        <textarea name="content" rows="3" placeholder="Add a comment..." 
-                                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                                                required></textarea>
-                                    </div>
-                                    <div class="flex justify-end">
-                                        <button type="submit" class="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-                                            Post Comment
-                                        </button>
-                                    </div>
-                                </form>
+                                <div class="border-t border-gray-200 pt-4">
+                                    <h4 class="text-md font-medium text-gray-700 mb-3">Add a comment</h4>
+                                    <form method="POST" action="{{ route('risks.comments.store', $risk) }}">
+                                        @csrf
+                                        <div class="mb-3">
+                                            <textarea name="content" rows="3" placeholder="Write your comment here..." 
+                                                      class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+                                                      required></textarea>
+                                        </div>
+                                        <div class="flex justify-end">
+                                            <button type="submit" class="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                                                Post Comment
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
                             @endif
                         </div>
                     </div>
-                    <!-- Risk Owner Card -->
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
-                        <div class="p-6">
-                            <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-3">Risk Owner</h3>
-                            <div class="flex items-center mb-4">
-                                <div class="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 font-semibold">
-                                    {{ substr($risk->user->name, 0, 1) }}
-                                </div>
-                                <div class="ml-3">
-                                    <p class="text-sm font-medium text-gray-900">{{ $risk->user->name }}</p>
-                                    <p class="text-sm text-gray-500">{{ $risk->user->email }}</p>
-                                </div>
-                            </div>
-                            <p class="text-sm text-gray-600">Department: {{ $risk->user->department }}</p>
-                        </div>
-                    </div>
+                    
                     <!-- Collaborators Card -->
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
                         <div class="p-6">
@@ -359,9 +389,26 @@
                             @endif
                         </div>
                     </div>
-
-                    <!-- Activity Info Card -->
+                    
+                    <!-- Risk Owner Card -->
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+                        <div class="p-6">
+                            <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-3">Risk Owner</h3>
+                            <div class="flex items-center mb-4">
+                                <div class="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-700 font-semibold">
+                                    {{ substr($risk->user->name, 0, 1) }}
+                                </div>
+                                <div class="ml-3">
+                                    <p class="text-sm font-medium text-gray-900">{{ $risk->user->name }}</p>
+                                    <p class="text-sm text-gray-500">{{ $risk->user->email }}</p>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-600">Department: {{ $risk->user->department }}</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Activity Info Card -->
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6">
                             <h3 class="text-lg font-medium text-gray-900 border-b pb-2 mb-3">Activity Log</h3>
                             
@@ -370,7 +417,7 @@
                                     <h4 class="text-sm font-medium text-gray-700">Created</h4>
                                     <p class="text-sm text-gray-600">By: {{ $risk->user->name }}</p>
                                     <p class="text-sm text-gray-600">Date: {{ $risk->created_at->format('M d, Y') }}</p>
-                                    <p class="text-sm text-gray-600">At: {{ $risk->created_at->format('h:i A') }}</p>
+                                    <p class="text-sm text-gray-600">Time: {{ $risk->created_at->format('h:i A') }}</p>
                                 </div>
                                 
                                 @if ($risk->updated_at->gt($risk->created_at))
@@ -386,7 +433,6 @@
                             </div>
                         </div>
                     </div>
-                    
                 </div>
             </div>
         </div>

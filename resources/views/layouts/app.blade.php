@@ -119,7 +119,7 @@
                                 <p class="text-sm font-medium text-gray-900 truncate hover:text-indigo-600">
                                     {{ Auth::user()->name }}
                                 </p>
-                                <p class="text-sm text-gray-500 truncate">
+                                <p class="text-sm text-gray-500 truncate hover:text-indigo-600">
                                     {{ Auth::user()->email }}
                                 </p>
                             </div>
@@ -191,7 +191,7 @@
                                 <!-- Logout -->
                                 <form method="POST" action="{{ route('logout') }}">
                                     @csrf
-                                    <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-red-500">
+                                    <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                         {{ __('Log Out') }}
                                     </button>
                                 </form>
