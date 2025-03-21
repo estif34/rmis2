@@ -73,7 +73,7 @@
             </div>
             
             <!-- Risks Table -->
-             <div class="overflow-x-auto">
+            <div class="overflow-x-auto">
                 @if ($risks->count() > 0)
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
@@ -89,7 +89,7 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach ($risks as $risk)
-                                <tr>
+                                <tr class="hover:bg-gray-100 cursor-pointer" onclick="window.location.href='{{ route('risks.show', $risk) }}'">
                                     <!-- <td class="px-6 py-4 whitespace-nowrap">{{ $risk->id }}</td> -->
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <a href="{{ route('risks.show', $risk) }}" class="text-indigo-600 hover:text-indigo-900">
