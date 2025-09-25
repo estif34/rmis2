@@ -1,66 +1,64 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# RMIS: A risk management system
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+![Laravel](https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
+## Description
+RMIS is a risk management system designed for financial organizations to track risks and record new ones.
+Some of the features are:
+- **Dashboard**: View the summary of risks based on severity, status, and categories. 
+- **Risk register**: List of risks registered.
+- **Collaborators**: Users that can edit or update a risk and add incidents on that risk.
+- **Comment section**: A note/comment section of a risk.
+- **Incident reporting**: A risk can have multiple risks and they can be reported and viewed within the risk.
+- **Search and filter**: Search using key words or filter using status, category or severity. 
+- **Role-based status update**: Status can be updated only by creator of risk or higher level manager. 
+- **Admin-based registration**: Admin approval required for registration. 
+- **On system and email notification**: Admin notified when a new user requests approval, and user notified on the response from Admin.
 
-## About Laravel
+## Demo
+<img width="3804" height="2095" alt="Dashboard" src="https://github.com/user-attachments/assets/f1f049d8-5a43-4fe6-a40b-3397d610b96c" />
+<img width="3824" height="2102" alt="Registered risks" src="https://github.com/user-attachments/assets/08e38114-e2a1-4fea-bce7-30a3881ad4e4" />
+<img width="3805" height="2102" alt="Admin portal for user management" src="https://github.com/user-attachments/assets/e19e6723-d189-42fe-8954-b0b3484bb266" />
+<img width="3798" height="2100" alt="Risk Detailed view" src="https://github.com/user-attachments/assets/b80a35ab-8d51-4564-81ec-43f417b5067f" />
+<img width="3798" height="2100" alt="Risk Detailed view 2" src="https://github.com/user-attachments/assets/4745b85d-6781-4a8c-b7c9-f9881b6a09de" />
+<img width="3804" height="2098" alt="Risk Detailed view 3" src="https://github.com/user-attachments/assets/ca2f0554-3eca-48d0-b895-caf82867c3aa" />
+<img width="3839" height="2085" alt="Incident view" src="https://github.com/user-attachments/assets/c2e7fa39-2a8e-4924-89af-4608a073bd4c" />
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Prerequisites
+- PHP (>= 8.2)
+- Composer
+- Laravel (>= 9.0)
+- A database (e.g., MySQL)
+- Node.js
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/estif34/rmis2.git
+   cd rmis2
+   ```
+2. Install dependencies:
+   ```bash
+   composer install
+   npm install
+   npm run dev
+   ```
+3. Set up the environment:
+   ```bash
+   copy .env.example .env
+   ```
+   - Configure the .env file with your database and application settings.
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+4. Generate the application key:
+   ```bash
+   php artisan key:generate
+   ```
+5. Run migrations to set up the database:
+   ```bash
+   php artisan migrate
+   ```
+6. Start the development server:
+   ```bash
+   php artisan serve
+   ```
+7. Access the application at http://127.0.0.1:8000
