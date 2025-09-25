@@ -16,12 +16,13 @@ Some of the features are:
 
 ## Demo
 <img width="3804" height="2095" alt="Dashboard" src="https://github.com/user-attachments/assets/f1f049d8-5a43-4fe6-a40b-3397d610b96c" />
+<img width="3800" height="2097" alt="Dashboard 2" src="https://github.com/user-attachments/assets/663373b8-7bf9-4023-b556-20710773a450" />
 <img width="3824" height="2102" alt="Registered risks" src="https://github.com/user-attachments/assets/08e38114-e2a1-4fea-bce7-30a3881ad4e4" />
-<img width="3805" height="2102" alt="Admin portal for user management" src="https://github.com/user-attachments/assets/e19e6723-d189-42fe-8954-b0b3484bb266" />
 <img width="3800" height="2097" alt="Risk Detatiled view 1" src="https://github.com/user-attachments/assets/8dfd7754-98b0-4efb-a77c-d79cab327e41" />
 <img width="3798" height="2100" alt="Risk Detailed view 2" src="https://github.com/user-attachments/assets/4745b85d-6781-4a8c-b7c9-f9881b6a09de" />
 <img width="3804" height="2098" alt="Risk Detailed view 3" src="https://github.com/user-attachments/assets/ca2f0554-3eca-48d0-b895-caf82867c3aa" />
 <img width="3839" height="2085" alt="Incident view" src="https://github.com/user-attachments/assets/c2e7fa39-2a8e-4924-89af-4608a073bd4c" />
+<img width="3805" height="2102" alt="Admin portal for user management" src="https://github.com/user-attachments/assets/e19e6723-d189-42fe-8954-b0b3484bb266" />
 
 ## Prerequisites
 - PHP (>= 8.2)
